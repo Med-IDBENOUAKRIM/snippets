@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -17,6 +18,7 @@ type Application struct {
 }
 
 func main() {
+	godotenv.Load(".env")
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
@@ -42,8 +44,12 @@ func main() {
 
 func connectDB() (*sql.DB, error) {
 	dbSource := os.Getenv("DB_SOURCE")
+	driverName := os.Getenv("DRIVER_NAME")
 
-	db, err := sql.Open("postgres", dbSource)
+	log.Println("dbSource >>> ", dbSource)
+	log.Println("driverName >>> ", driverName)
+
+	db, err := sql.Open(driverName, dbSource)
 
 	if err != nil {
 		return nil, err
