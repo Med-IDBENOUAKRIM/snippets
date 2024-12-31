@@ -11,10 +11,12 @@ import (
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/med-IDBENOUAKRIM/snippetbox/internal/models"
 )
 
 type Application struct {
-	logger *slog.Logger
+	logger   *slog.Logger
+	snippets *models.SnippetModel
 }
 
 func main() {
@@ -22,18 +24,19 @@ func main() {
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
-	app := &Application{
-		logger: logger,
-	}
-
-	log.Println("starting server on :4000")
-
 	db, err := connectDB()
 	if err != nil {
 		logger.Error(err.Error())
 		os.Exit(1)
 	}
 	defer db.Close()
+
+	app := &Application{
+		logger:   logger,
+		snippets: &models.SnippetModel{DB: db},
+	}
+
+	log.Println("starting server on :4000")
 
 	logger.Info("db connection is established")
 
