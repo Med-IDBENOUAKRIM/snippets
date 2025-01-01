@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -41,9 +42,19 @@ func (app *Application) getSnippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	snippet, err := app.snippets.GetSnippet(id)
+	if err != nil {
+		if errors.Is(err, models.ErrRecordNotFound) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+	fmt.Fprintf(w, "%+v", snippet)
 	// msg := fmt.Sprintf("Display a specific snippet with ID %d ... ", id)
 	// w.Write([]byte(msg))
-	fmt.Fprintf(w, "Display a specific snippet with ID %d ... ", id)
+	// fmt.Fprintf(w, "Display a specific snippet with ID %d ... ", id)
 }
 
 func (app *Application) snippetCreate(w http.ResponseWriter, r *http.Request) {
