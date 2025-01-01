@@ -18,9 +18,8 @@ type SnippetModel struct {
 	DB *sql.DB
 }
 
-// func (m *SnippetModel) InsertSnippet(title, content string, expires int) (int, error) {
-func (m *SnippetModel) InsertSnippet(snippet *Snippet) (int, error) {
-	query := `INSERT INTO snippets (title, content, expires) VALUES ($1, $2, $3) RETURNING id, title, created`
+func (m *SnippetModel) InsertSnippet(snippet *Snippet) error {
+	query := `INSERT INTO snippets (title, content, expires) VALUES ($1, $2, $3) RETURNING id`
 
 	args := []any{
 		snippet.Title,
@@ -31,15 +30,7 @@ func (m *SnippetModel) InsertSnippet(snippet *Snippet) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	result, err := m.DB.ExecContext(ctx, query, args...)
-	if err != nil {
-		return 0, err
-	}
-	id, err := result.RowsAffected()
-	if err != nil {
-		return 0, err
-	}
-	return int(id), nil
+	return m.DB.QueryRowContext(ctx, query, args...).Scan(&snippet.ID)
 }
 
 func (m *SnippetModel) GetSnippet() (Snippet, error) {

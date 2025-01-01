@@ -52,17 +52,17 @@ func (app *Application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 
 func (app *Application) createSnippet(w http.ResponseWriter, r *http.Request) {
 
-	snippet := models.Snippet{
-		Title:   "0 snail",
-		Content: "O snail\nClimb Mount Fuji,\nBut slowly, slowly!\n\n– Kobayashi Issa",
+	snippet := &models.Snippet{
+		Title:   "2 snail",
+		Content: "2 snail\nClimb Mount Fuji,\nBut slowly, slowly!\n\n– Kobayashi Issa",
 		Expires: time.Now().Add(7 * 22 * time.Hour),
 	}
 
-	id, err := app.snippets.InsertSnippet(&snippet)
+	err := app.snippets.InsertSnippet(snippet)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
 	}
-	http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", id), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", snippet.ID), http.StatusSeeOther)
 
 }
