@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"strconv"
 	"text/template"
+	"time"
+
+	"github.com/med-IDBENOUAKRIM/snippetbox/internal/models"
 )
 
 func (app *Application) home(w http.ResponseWriter, r *http.Request) {
@@ -48,6 +51,18 @@ func (app *Application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) createSnippet(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("snippet form to create snippet POST"))
+
+	snippet := models.Snippet{
+		Title:   "0 snail",
+		Content: "O snail\nClimb Mount Fuji,\nBut slowly, slowly!\n\n– Kobayashi Issa",
+		Expires: time.Now().Add(7 * 22 * time.Hour),
+	}
+
+	id, err := app.snippets.InsertSnippet(&snippet)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", id), http.StatusSeeOther)
+
 }
