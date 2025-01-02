@@ -5,33 +5,36 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"text/template"
 	"time"
 
 	"github.com/med-IDBENOUAKRIM/snippetbox/internal/models"
 )
 
 func (app *Application) home(w http.ResponseWriter, r *http.Request) {
-
-	files := []string{
-		"./ui/html/base.html",
-		"./ui/html/partials/nav.html",
-		"./ui/html/pages/home.html",
-	}
-
-	ts, err := template.ParseFiles(files...)
+	w.Header().Add("server", "Go")
+	snippets, err := app.snippets.LatestSnippets()
 	if err != nil {
 		app.serverError(w, r, err)
 		return
 	}
 
-	err = ts.ExecuteTemplate(w, "base", nil)
-	if err != nil {
-		app.serverError(w, r, err)
+	for _, snippet := range snippets {
+		fmt.Fprintf(w, "%+v\n\n\n", snippet)
 	}
+	// files := []string{
+	// 	"./ui/html/base.html",
+	// 	"./ui/html/partials/nav.html",
+	// 	"./ui/html/pages/home.html",
+	// }
 
-	w.Header().Add("server", "Go")
-	w.Write([]byte("Hey There"))
+	// ts, err := template.ParseFiles(files...)
+
+	// err = ts.ExecuteTemplate(w, "base", nil)
+	// if err != nil {
+	// 	app.serverError(w, r, err)
+	// }
+
+	// w.Write([]byte("Hey There"))
 }
 
 func (app *Application) getSnippetView(w http.ResponseWriter, r *http.Request) {
@@ -75,5 +78,16 @@ func (app *Application) createSnippet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", snippet.ID), http.StatusSeeOther)
+
+}
+
+func (app *Application) getLastSnippet(w http.ResponseWriter, r *http.Request) {
+
+	snippets, err := app.snippets.LatestSnippets()
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+	fmt.Fprintf(w, "%+v", snippets)
 
 }
