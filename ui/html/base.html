@@ -11,13 +11,15 @@
 	<body>
 		<!-- class="flex flex-col justify-center items-center border-2 w-1/2 mx-auto" -->
 		<!-- class="p-4 border-2 w-1/2 mx-auto" -->
+		<!-- class="w-3/4 mx-auto flex flex-col flex-1" -->
 		<div
-			class="flex flex-col h-dvh flex-row min-h-screen justify-center items-center"
+			class="w-3/4 mx-auto flex-col h-dvh flex-row min-h-screen justify-center items-center"
 		>
 			<header class="text-center">
 				<h1 class="text-3xl"><a href="/">Snippetbox</a></h1>
 			</header>
 			{{template "nav" .}}
+			<!-- class="h-dvh min-h-screen" -->
 			<main>{{template "main" .}}</main>
 			<footer class="text-xl">
 				Powered by <a href="https://golang.org/" class="text-blue-700">Go</a>
