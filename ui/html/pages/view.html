@@ -1,0 +1,14 @@
+{{define "title"}}Snippet #{{.ID}}{{end}} {{define "main"}}
+<div class="border-2 p-4">
+	<div class="flex justify-between">
+		<strong>{{.Title}}</strong>
+		<span class="text-gray-500">#{{.ID}}</span>
+	</div>
+	<pre><code>{{.Content}}</code></pre>
+	<div>
+		<time>Created: {{.Created}}</time>
+		<time>Expires: {{.Expires}}</time>
+	</div>
+</div>
+
+{{end}}
