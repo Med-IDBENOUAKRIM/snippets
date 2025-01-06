@@ -1,23 +1,24 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Home - Snippetbox</title>
-	</head>
-	<body>
-		<header>
-			<h1><a href="/">Snippetbox</a></h1>
-		</header>
-		<main>
-			<h2>Latest Snippets</h2>
-			<p>There's nothing to see here yet!</p>
-		</main>
-		<footer>Powered by <a href="https://golang.org/">Go</a></footer>
-	</body>
-</html> -->
-
 {{define "title"}}Home{{end}} {{define "main"}}
-<h2>Latest Snippets</h2>
+<h2 class="pt-10 pb-5">Latest Snippets</h2>
+{{if .Snippets}}
+
+<table class="w-full border-2 shadow-md rounded-xl">
+	<tr class="text-lg text-center border-b px-3">
+		<th scope="col" class="py-3">Title</th>
+		<th scope="col" class="py-3">Created</th>
+		<th scope="col" class="py-3">ID</th>
+	</tr>
+	{{range .Snippets}}
+
+	<tr class="bg-white text-center border-b p-4 dark:border-gray-700">
+		<td class="text-blue-500 p-2 hover:underline">
+			<a href="/snippet/view/{{.ID}}">{{.Title}}</a>
+		</td>
+		<td>{{.Created}}</td>
+		<td>#{{.ID}}</td>
+	</tr>
+	{{end}}
+</table>
+{{else}}
 <p>There's nothing to see here yet!</p>
-{{end}}
+{{end}} {{end}}

@@ -1,14 +1,14 @@
-{{define "title"}}Snippet #{{.Snippet.ID}}{{end}} {{define "main"}}
+{{define "title"}}Snippet #{{.Snippet.ID}}{{end}} {{define "main"}} {{with
+.Snippet}}
 <div class="border-2 shadow-md rounded-xl">
 	<div class="p-4 bg-gray-100 flex justify-between border-b-2">
-		<strong>{{.Snippet.Title}}</strong>
-		<span class="text-gray-500">#{{.Snippet.ID}}</span>
+		<strong>{{.Title}}</strong>
+		<span class="text-gray-500">#{{.ID}}</span>
 	</div>
-	<pre class="px-4 py-8"><code>{{.Snippet.Content}}</code></pre>
+	<pre class="px-4 py-8"><code>{{.Content}}</code></pre>
 	<div class="p-3 border-t-2 flex justify-between bg-gray-100">
-		<time>Created: {{.Snippet.Created}}</time>
-		<time>Expires: {{.Snippet.Expires}}</time>
+		<time>Created: {{.Created.Weekday}}</time>
+		<time>Expires: {{.Expires}}</time>
 	</div>
 </div>
-
-{{end}}
+{{end}} {{end}}
